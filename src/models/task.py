@@ -29,16 +29,24 @@ class Task:
         """Змінює статус задачі згідно з суворою матрицею переходів."""
         if self.status == new_status:
             raise ValueError("Already in this status")
-        
-        # Матриця дозволених переходів (згідно з твоїми тестами)
+
         allowed = {
             TaskStatus.TODO: [TaskStatus.IN_PROGRESS],
-            TaskStatus.IN_PROGRESS: [TaskStatus.IN_REVIEW, TaskStatus.BLOCKED],
-            TaskStatus.IN_REVIEW: [TaskStatus.IN_PROGRESS, TaskStatus.DONE],
+            TaskStatus.IN_PROGRESS: [
+                TaskStatus.IN_REVIEW,
+                TaskStatus.BLOCKED,
+            ],
+            TaskStatus.IN_REVIEW: [
+                TaskStatus.IN_PROGRESS,
+                TaskStatus.DONE,
+            ],
             TaskStatus.BLOCKED: [TaskStatus.IN_PROGRESS],
         }
 
         if new_status not in allowed.get(self.status, []):
-            raise ValueError(f"Transition {self.status.name} -> {new_status.name} forbidden")
+            raise ValueError(
+                f"Transition {self.status.name} -> "
+                f"{new_status.name} forbidden"
+            )
 
         self.status = new_status
