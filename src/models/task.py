@@ -5,12 +5,14 @@ from enum import Enum
 
 
 class TaskStatus(Enum):
-    """Перелік можливих статусів задачі."""
+    """Перелік всіх можливих статусів задачі."""
     TODO = "todo"
     IN_PROGRESS = "in_progress"
     IN_REVIEW = "in_review"
     DONE = "done"
     CANCELLED = "cancelled"
+    BLOCKED = "blocked"
+    ARCHIVED = "archived"
 
 
 @dataclass
