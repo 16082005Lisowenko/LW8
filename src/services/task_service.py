@@ -2,6 +2,7 @@
 from typing import List
 from src.models.task import Task
 
+
 class TaskService:
     """Сервіс для управління задачами."""
     def __init__(self) -> None:
