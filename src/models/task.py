@@ -2,6 +2,7 @@
 from dataclasses import dataclass, field
 from datetime import datetime
 
+
 @dataclass
 class Task:
     """Клас, що описує сутність задачі."""
