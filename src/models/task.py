@@ -29,13 +29,8 @@ class Task:
         """Змінює статус задачі з перевіркою правил переходу."""
         if self.status == new_status:
             raise ValueError("Already in this status")
-        
-        # Логіка заборони переходів із термінальних станів
         if self.status in [TaskStatus.DONE, TaskStatus.CANCELLED]:
             raise ValueError(f"Cannot change status from {self.status.name}")
-
-        # Специфічне правило: з TODO не можна в DONE без перевірки (приклад)
         if self.status == TaskStatus.TODO and new_status == TaskStatus.DONE:
             raise ValueError("Cannot jump from TODO to DONE")
-
         self.status = new_status
