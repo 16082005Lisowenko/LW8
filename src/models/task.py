@@ -8,7 +8,9 @@ class TaskStatus(Enum):
     """Перелік можливих статусів задачі."""
     TODO = "todo"
     IN_PROGRESS = "in_progress"
+    IN_REVIEW = "in_review"
     DONE = "done"
+    CANCELLED = "cancelled"
 
 
 @dataclass
