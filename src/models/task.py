@@ -19,8 +19,8 @@ class TaskStatus(Enum):
 class Task:
     """Клас, що описує сутність задачі."""
     title: str
-    user: str
-    priority: int
+    user: str = "default"
+    priority: int = 1
     id: int = 0
     status: TaskStatus = TaskStatus.TODO
     created: str = field(default_factory=lambda: str(datetime.now()))
