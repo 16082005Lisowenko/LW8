@@ -26,11 +26,19 @@ class Task:
     created: str = field(default_factory=lambda: str(datetime.now()))
 
     def change_status(self, new_status: TaskStatus):
-        """Змінює статус задачі з перевіркою правил переходу."""
+        """Змінює статус задачі згідно з суворою матрицею переходів."""
         if self.status == new_status:
             raise ValueError("Already in this status")
-        if self.status in [TaskStatus.DONE, TaskStatus.CANCELLED]:
-            raise ValueError(f"Cannot change status from {self.status.name}")
-        if self.status == TaskStatus.TODO and new_status == TaskStatus.DONE:
-            raise ValueError("Cannot jump from TODO to DONE")
+        
+        # Матриця дозволених переходів (згідно з твоїми тестами)
+        allowed = {
+            TaskStatus.TODO: [TaskStatus.IN_PROGRESS],
+            TaskStatus.IN_PROGRESS: [TaskStatus.IN_REVIEW, TaskStatus.BLOCKED],
+            TaskStatus.IN_REVIEW: [TaskStatus.IN_PROGRESS, TaskStatus.DONE],
+            TaskStatus.BLOCKED: [TaskStatus.IN_PROGRESS],
+        }
+
+        if new_status not in allowed.get(self.status, []):
+            raise ValueError(f"Transition {self.status.name} -> {new_status.name} forbidden")
+
         self.status = new_status
