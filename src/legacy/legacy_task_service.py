@@ -6,15 +6,19 @@ from enum import Enum
 from dataclasses import dataclass, field
 from typing import List, Optional, Union
 
+
 class TaskStatus(Enum):
     """Статуси задачі."""
+
     TODO = "todo"
     IN_PROGRESS = "in_progress"
     DONE = "done"
 
+
 @dataclass
 class Task:
     """Сутність задачі."""
+
     title: str
     user: str
     priority: int
@@ -22,8 +26,10 @@ class Task:
     status: TaskStatus = TaskStatus.TODO
     created: str = field(default_factory=lambda: str(datetime.datetime.now()))
 
+
 class TaskRepository:
     """Клас для зберігання задач у пам'яті."""
+
     def __init__(self) -> None:
         self.tasks: List[Task] = []
         self.next_id: int = 1
@@ -42,30 +48,35 @@ class TaskRepository:
                 return task
         return None
 
-LOG_FILE = 'log.txt'
+
+LOG_FILE = "log.txt"
 repo = TaskRepository()
+
 
 def _validate_title(title: str) -> bool:
     """Перевіряє заголовок на валідність."""
     return bool(title and len(title) <= 100)
 
+
 def _send_email(user_email: str, title: str) -> None:
     """Надсилає email користувачу."""
     try:
-        msg = MIMEText(f'New task: {title}')
-        msg['Subject'] = 'Task created'
-        msg['From'] = 'noreply@tms.com'
-        msg['To'] = user_email
-        server = smtplib.SMTP('localhost')
+        msg = MIMEText(f"New task: {title}")
+        msg["Subject"] = "Task created"
+        msg["From"] = "noreply@tms.com"
+        msg["To"] = user_email
+        server = smtplib.SMTP("localhost")
         server.send_message(msg)
         server.quit()
     except smtplib.SMTPException as err:
         print(f"Email error: {err}")
 
+
 def _log_action(action_msg: str) -> None:
     """Логує дію у файл."""
-    with open(LOG_FILE, 'a', encoding='utf-8') as file:
+    with open(LOG_FILE, "a", encoding="utf-8") as file:
         file.write(f"{datetime.datetime.now()}: {action_msg}\n")
+
 
 def create_task(title: str, user_email: str, priority: Optional[int] = None) -> Optional[Task]:
     """
@@ -81,6 +92,7 @@ def create_task(title: str, user_email: str, priority: Optional[int] = None) -> 
     _send_email(user_email, title)
     return task
 
+
 def assign_task(task_id: int, user_email: str) -> Optional[Task]:
     """
     Призначає виконавця задачі.
@@ -93,6 +105,7 @@ def assign_task(task_id: int, user_email: str) -> Optional[Task]:
         _log_action("assigned")
         return task
     return None
+
 
 def complete_task(task_id: int) -> Union[Task, bool, None]:
     """

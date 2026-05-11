@@ -2,6 +2,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from typing import List, Optional
 
+
 @dataclass
 class Task:
     id: int
@@ -12,17 +13,32 @@ class Task:
     assignee_id: Optional[int] = None
     status: str = "TODO"
 
+
 class TaskRepository:
     """Абстракція репозиторію (БД)"""
-    def save(self, task: Task) -> Task: pass
-    def get_by_id(self, task_id: int) -> Optional[Task]: pass
-    def get_by_assignee(self, assignee_id: int) -> List[Task]: pass
-    def update(self, task: Task) -> Task: pass
+
+    def save(self, task: Task) -> Task:
+        pass
+
+    def get_by_id(self, task_id: int) -> Optional[Task]:
+        pass
+
+    def get_by_assignee(self, assignee_id: int) -> List[Task]:
+        pass
+
+    def update(self, task: Task) -> Task:
+        pass
+
 
 class NotificationService:
     """Абстракція сервісу сповіщень"""
-    def send_assignment_notification(self, task_id: int, assignee_id: int) -> None: pass
-    def send_status_change_notification(self, task_id: int, new_status: str) -> None: pass
+
+    def send_assignment_notification(self, task_id: int, assignee_id: int) -> None:
+        pass
+
+    def send_status_change_notification(self, task_id: int, new_status: str) -> None:
+        pass
+
 
 class TaskService:
     def __init__(self, repo: TaskRepository, notifier: NotificationService):
@@ -53,23 +69,23 @@ class TaskService:
         task = self.repo.get_by_id(task_id)
         if not task:
             raise ValueError(f"Task {task_id} not found")
-        
+
         valid_statuses = ["TODO", "IN_PROGRESS", "DONE"]
         if new_status not in valid_statuses:
             raise ValueError("Invalid status")
-            
+
         task.status = new_status
         updated_task = self.repo.update(task)
         self.notifier.send_status_change_notification(task_id, new_status)
         return updated_task
-        
+
     def archive_task(self, task_id: int) -> bool:
         task = self.repo.get_by_id(task_id)
         if not task:
             raise ValueError(f"Task {task_id} not found")
         if task.status != "DONE":
             raise ValueError("Only DONE tasks can be archived")
-        
+
         task.status = "ARCHIVED"
         self.repo.update(task)
         return True
